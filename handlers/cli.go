@@ -42,7 +42,7 @@ func (this *Handler) Handle(args []string) error {
 }
 
 var (
-	errWrongArgCount        = errors.New("usage: calc <a> <b>")
+	errWrongArgCount        = errors.New("two args required")
 	errInvalidArgument      = errors.New("invalid argument")
 	errOutputWriter         = errors.New("output failure")
 	errUnsupportedOperation = errors.New("unsupported operation")
