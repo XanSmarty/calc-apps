@@ -25,8 +25,13 @@ func NewCSVHandler(logger *log.Logger, input io.Reader, output io.Writer, calcul
 	}
 }
 
-func (this *CSVHandler) Handle() error {
-	defer this.output.Flush()
+func (this *CSVHandler) Handle() (err error) {
+	defer func() {
+		this.output.Flush()
+		if err == nil {
+			err = this.output.Error()
+		}
+	}()
 	for {
 		record, err := this.input.Read()
 		if err == io.EOF {
@@ -35,6 +40,9 @@ func (this *CSVHandler) Handle() error {
 		if len(record) != 3 {
 			this.logger.Println("must provide exactly 3 fields")
 			continue
+		}
+		if err != nil {
+			return err
 		}
 		a, err := strconv.Atoi(record[0])
 		if err != nil {
